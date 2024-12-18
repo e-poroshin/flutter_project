@@ -1,16 +1,8 @@
-# test_flutter_project
+# News list
 
-Test Flutter project.
+Test Flutter project
 
-## Getting Started
+This project is created to demonstrate a list of news retrieved from [open API](https://newsapi.org) 
+with the api key.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+We can read the details of each article on a new screen by clicking on the list item.
