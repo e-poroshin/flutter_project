@@ -6,16 +6,18 @@ import 'package:http/http.dart' as http;
 import 'models/news_article.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter News List',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: NewsListScreen(),
+      home: const NewsListScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -68,12 +70,12 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('News List')),
+      appBar: AppBar(title: const Text('News List')),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.separated(
               itemCount: _articles.length,
-              separatorBuilder: (context, index) => Divider(),
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 final article = _articles[index];
                 return ListTile(
@@ -98,12 +100,12 @@ class _NewsListScreenState extends State<NewsListScreen> {
 class NewsDetailScreen extends StatelessWidget {
   final NewsArticle article;
 
-  const NewsDetailScreen({Key? key, required this.article}) : super(key: key);
+  const NewsDetailScreen({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('News Details')),
+      appBar: AppBar(title: const Text('News Details')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -129,18 +131,18 @@ class NewsDetailScreen extends StatelessWidget {
                       );
                     },
                   )
-                : SizedBox(height: 0),
-            SizedBox(height: 16),
+                : const SizedBox(height: 0),
+            const SizedBox(height: 16),
             Text(
               article.title ?? 'No Title',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(article.description ?? 'No Description',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Text('Source: ${article.source ?? 'Unknown'}',
-                style: TextStyle(color: Colors.grey)),
+                style: const TextStyle(color: Colors.grey)),
           ],
         ),
       ),
