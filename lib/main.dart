@@ -9,7 +9,7 @@ import 'models/news_article.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => NewsProvider(),
+      create: (context) => NewsProvider()..fetchArticles(),
       child: const MyApp(),
     ),
   );
