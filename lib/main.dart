@@ -2,11 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'models/news_article.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => NewsProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,22 +29,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class NewsListScreen extends StatefulWidget {
-  const NewsListScreen({super.key});
-
-  @override
-  _NewsListScreenState createState() => _NewsListScreenState();
-}
-
-class _NewsListScreenState extends State<NewsListScreen> {
+class NewsProvider extends ChangeNotifier {
   List<NewsArticle> _articles = [];
   bool _isLoading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    fetchArticles();
-  }
+  List<NewsArticle> get articles => _articles;
+
+  bool get isLoading => _isLoading;
 
   Future<void> fetchArticles() async {
     const apiKey = '3b6efad461c04c7e9195f44b42552d15';
@@ -47,37 +44,39 @@ class _NewsListScreenState extends State<NewsListScreen> {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        setState(() {
-          final data = json.decode(response.body);
-          _articles = (data['articles'] as List)
-              .map((json) => NewsArticle.fromJson(json))
-              .toList();
-          _isLoading = false;
-        });
+        final data = json.decode(response.body);
+        _articles = (data['articles'] as List)
+            .map((json) => NewsArticle.fromJson(json))
+            .toList();
+        _isLoading = false;
+        notifyListeners();
       } else {
         throw Exception('Failed to load articles');
       }
     } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $error')),
-      );
+      _isLoading = false;
+      notifyListeners();
+      throw error;
     }
   }
+}
+
+class NewsListScreen extends StatelessWidget {
+  const NewsListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<NewsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('News List')),
-      body: _isLoading
+      body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.separated(
-              itemCount: _articles.length,
+              itemCount: provider.articles.length,
               separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
-                final article = _articles[index];
+                final article = provider.articles[index];
                 return ListTile(
                   title: Text(article.title ?? 'No Title'),
                   subtitle: Text(article.source ?? 'Unknown Source'),
@@ -93,6 +92,10 @@ class _NewsListScreenState extends State<NewsListScreen> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: provider.fetchArticles,
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 }
