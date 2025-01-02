@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'models/news_article.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
     ChangeNotifierProvider(
       create: (context) => NewsProvider()..fetchArticles(),
@@ -38,7 +40,11 @@ class NewsProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<void> fetchArticles() async {
-    const apiKey = '3b6efad461c04c7e9195f44b42552d15';
+    final apiKey = dotenv.env['API_KEY'];
+    if (apiKey == null) {
+      throw Exception('API key not found in .env file');
+    }
+
     final url = Uri.parse(
         'https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey');
     try {
@@ -56,7 +62,7 @@ class NewsProvider extends ChangeNotifier {
     } catch (error) {
       _isLoading = false;
       notifyListeners();
-      throw error;
+      rethrow;
     }
   }
 }
