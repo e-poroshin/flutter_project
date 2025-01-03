@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/news_provider.dart';
-import 'screens/news_list_screen.dart';
+import 'screens/main_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter News List',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const NewsListScreen(),
+      home: const MainScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
