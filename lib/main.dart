@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/news_provider.dart';
+import 'provider/profile_provider.dart';
 import 'provider/saved_articles_provider.dart';
 import 'screens/main_screen.dart';
 
@@ -14,6 +15,7 @@ void main() async {
         ChangeNotifierProvider(
             create: (context) => NewsProvider()..fetchArticles()),
         ChangeNotifierProvider(create: (context) => SavedArticlesProvider()),
+        ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ],
       child: const MyApp(),
     ),
