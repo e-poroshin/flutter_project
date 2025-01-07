@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/news_article.dart';
+import '../provider/saved_articles_provider.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   final NewsArticle article;
@@ -9,6 +11,9 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final savedProvider =
+        Provider.of<SavedArticlesProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(title: const Text('News Details')),
       body: Padding(
@@ -19,35 +24,38 @@ class NewsDetailScreen extends StatelessWidget {
             article.urlToImage != null
                 ? Image.network(
                     article.urlToImage!,
-                    height: 200,
-                    fit: BoxFit.cover,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) return child;
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    (loadingProgress.expectedTotalBytes ?? 1)
-                                : null,
-                          ),
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
                         ),
                       );
                     },
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox.shrink(),
                   )
-                : const SizedBox(height: 0),
+                : const SizedBox.shrink(),
             const SizedBox(height: 16),
             Text(
               article.title ?? 'No Title',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
-            Text(article.description ?? 'No Description',
-                style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 16),
-            Text('Source: ${article.source ?? 'Unknown'}',
-                style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 8),
+            Text(article.description ?? 'No Description'),
+            const Spacer(),
+            ElevatedButton(
+              onPressed: () async {
+                await savedProvider.saveArticle(article);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Article saved!')),
+                );
+              },
+              child: const Text('Save'),
+            ),
           ],
         ),
       ),

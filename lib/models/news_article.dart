@@ -14,4 +14,22 @@ class NewsArticle {
       source: json['source']?['name'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'urlToImage': urlToImage,
+      'source': source,
+    };
+  }
+
+  factory NewsArticle.fromMap(Map<String, dynamic> map) {
+    return NewsArticle(
+      title: map['title'],
+      description: map['description'],
+      urlToImage: map['urlToImage'],
+      source: map['source'],
+    );
+  }
 }

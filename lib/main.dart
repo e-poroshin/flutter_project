@@ -3,13 +3,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/news_provider.dart';
+import 'provider/saved_articles_provider.dart';
 import 'screens/main_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => NewsProvider()..fetchArticles(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => NewsProvider()..fetchArticles()),
+        ChangeNotifierProvider(create: (context) => SavedArticlesProvider()),
+      ],
       child: const MyApp(),
     ),
   );
