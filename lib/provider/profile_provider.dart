@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class ProfileProvider extends ChangeNotifier {
+class ProfileProvider with ChangeNotifier {
   late Database _database;
+
   String _firstName = '';
   String _lastName = '';
   String _email = '';
@@ -18,34 +20,28 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   Future<void> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = '$databasePath/profile_data.db';
+    final dbPath = await getDatabasesPath();
     _database = await openDatabase(
-      path,
-      version: 1,
+      join(dbPath, 'profile.db'),
       onCreate: (db, version) {
-        db.execute('''
-          CREATE TABLE profile (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            firstName TEXT,
-            lastName TEXT,
-            email TEXT
-          )
-        ''');
+        return db.execute(
+          'CREATE TABLE profile(firstName TEXT, lastName TEXT, email TEXT)',
+        );
       },
+      version: 1,
     );
     await _loadProfile();
   }
 
   Future<void> _loadProfile() async {
-    final List<Map<String, dynamic>> maps = await _database.query('profile');
-    if (maps.isNotEmpty) {
-      final data = maps.first;
-      _firstName = data['firstName'] ?? '';
-      _lastName = data['lastName'] ?? '';
-      _email = data['email'] ?? '';
-      notifyListeners();
+    final List<Map<String, dynamic>> profiles =
+        await _database.query('profile');
+    if (profiles.isNotEmpty) {
+      _firstName = profiles[0]['firstName'] ?? '';
+      _lastName = profiles[0]['lastName'] ?? '';
+      _email = profiles[0]['email'] ?? '';
     }
+    notifyListeners();
   }
 
   Future<void> saveProfile(
@@ -54,12 +50,16 @@ class ProfileProvider extends ChangeNotifier {
     _lastName = lastName;
     _email = email;
 
+    await _database.delete('profile');
     await _database.insert(
       'profile',
       {'firstName': firstName, 'lastName': lastName, 'email': email},
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
     notifyListeners();
+  }
+
+  Future<void> closeDatabase() async {
+    await _database.close();
   }
 }

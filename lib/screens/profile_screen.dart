@@ -19,16 +19,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    _firstNameController =
-        TextEditingController(text: profileProvider.firstName);
-    _lastNameController = TextEditingController(text: profileProvider.lastName);
-    _emailController = TextEditingController(text: profileProvider.email);
+
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _emailController = TextEditingController();
 
     _firstNameController.addListener(_onFieldChange);
     _lastNameController.addListener(_onFieldChange);
     _emailController.addListener(_onFieldChange);
+
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    profileProvider.addListener(_populateFields);
+    _populateFields();
+  }
+
+  void _populateFields() {
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    setState(() {
+      _firstNameController.text = profileProvider.firstName;
+      _lastNameController.text = profileProvider.lastName;
+      _emailController.text = profileProvider.email;
+    });
   }
 
   void _onFieldChange() {
@@ -90,6 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    profileProvider.removeListener(_populateFields);
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
