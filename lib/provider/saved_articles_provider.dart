@@ -41,8 +41,24 @@ class SavedArticlesProvider extends ChangeNotifier {
   }
 
   Future<void> saveArticle(NewsArticle article) async {
-    await _database.insert('articles', article.toMap());
-    _savedArticles.add(article);
+    if (!_savedArticles.any((saved) => saved.title == article.title)) {
+      await _database.insert('articles', article.toMap());
+      _savedArticles.add(article);
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeArticle(NewsArticle article) async {
+    await _database.delete(
+      'articles',
+      where: 'title = ?',
+      whereArgs: [article.title],
+    );
+    _savedArticles.removeWhere((saved) => saved.title == article.title);
     notifyListeners();
+  }
+
+  bool isArticleSaved(NewsArticle article) {
+    return _savedArticles.any((saved) => saved.title == article.title);
   }
 }

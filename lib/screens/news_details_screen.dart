@@ -11,8 +11,8 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final savedProvider =
-        Provider.of<SavedArticlesProvider>(context, listen: false);
+    final savedProvider = Provider.of<SavedArticlesProvider>(context);
+    final isSaved = savedProvider.isArticleSaved(article);
 
     return Scaffold(
       appBar: AppBar(title: const Text('News Details')),
@@ -48,13 +48,20 @@ class NewsDetailScreen extends StatelessWidget {
             Text(article.description ?? 'No Description'),
             const Spacer(),
             ElevatedButton(
-              onPressed: () async {
-                await savedProvider.saveArticle(article);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Article saved!')),
-                );
+              onPressed: () {
+                if (isSaved) {
+                  savedProvider.removeArticle(article);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Article removed from saved list.')),
+                  );
+                } else {
+                  savedProvider.saveArticle(article);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Article saved!')),
+                  );
+                }
               },
-              child: const Text('Save'),
+              child: Text(isSaved ? 'Unsave' : 'Save'),
             ),
           ],
         ),
