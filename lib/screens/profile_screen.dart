@@ -91,6 +91,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Colors.grey;
+                      }
+                      return Colors.deepPurple;
+                    },
+                  ),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.white),
+                ),
                 onPressed: _hasChanged
                     ? () {
                         profileProvider.saveProfile(
