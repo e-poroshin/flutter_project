@@ -15,7 +15,28 @@ class NewsDetailScreen extends StatelessWidget {
     final isSaved = savedProvider.isArticleSaved(article);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('News Details')),
+      appBar: AppBar(
+        title: const Text('News Details'),
+        actions: [
+          IconButton(
+            icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: () {
+              if (isSaved) {
+                savedProvider.removeArticle(article);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Article removed from saved list.')),
+                );
+              } else {
+                savedProvider.saveArticle(article);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Article saved!')),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -47,22 +68,6 @@ class NewsDetailScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(article.description ?? 'No Description'),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                if (isSaved) {
-                  savedProvider.removeArticle(article);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Article removed from saved list.')),
-                  );
-                } else {
-                  savedProvider.saveArticle(article);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Article saved!')),
-                  );
-                }
-              },
-              child: Text(isSaved ? 'Unsave' : 'Save'),
-            ),
           ],
         ),
       ),
