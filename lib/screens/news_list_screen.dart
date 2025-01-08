@@ -15,30 +15,29 @@ class NewsListScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('News List')),
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.separated(
-              itemCount: provider.articles.length,
-              separatorBuilder: (context, index) => const Divider(),
-              itemBuilder: (context, index) {
-                final article = provider.articles[index];
-                return ListTile(
-                  title: Text(article.title ?? 'No Title'),
-                  subtitle: Text(article.source ?? 'Unknown Source'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NewsDetailScreen(article: article),
-                      ),
-                    );
-                  },
-                );
-              },
+          : RefreshIndicator(
+              onRefresh: provider.fetchArticles,
+              child: ListView.separated(
+                itemCount: provider.articles.length,
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: (context, index) {
+                  final article = provider.articles[index];
+                  return ListTile(
+                    title: Text(article.title ?? 'No Title'),
+                    subtitle: Text(article.source ?? 'Unknown Source'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NewsDetailScreen(article: article),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: provider.fetchArticles,
-        child: const Icon(Icons.refresh),
-      ),
     );
   }
 }
