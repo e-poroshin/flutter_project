@@ -66,34 +66,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             TextField(
               controller: _firstNameController,
-              decoration: const InputDecoration(labelText: 'First Name'),
+              decoration: const InputDecoration(
+                labelText: 'First Name',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: _lastNameController,
-              decoration: const InputDecoration(labelText: 'Last Name'),
+              decoration: const InputDecoration(
+                labelText: 'Last Name',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
             ),
             const Spacer(),
-            ElevatedButton(
-              onPressed: _hasChanged
-                  ? () {
-                      profileProvider.saveProfile(
-                        _firstNameController.text,
-                        _lastNameController.text,
-                        _emailController.text,
-                      );
-                      setState(() {
-                        _hasChanged = false;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Profile saved!')),
-                      );
-                    }
-                  : null,
-              child: const Text('Save'),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _hasChanged
+                    ? () {
+                        profileProvider.saveProfile(
+                          _firstNameController.text,
+                          _lastNameController.text,
+                          _emailController.text,
+                        );
+                        setState(() {
+                          _hasChanged = false;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profile saved!')),
+                        );
+                      }
+                    : null,
+                child: const Text('Save'),
+              ),
             ),
           ],
         ),
