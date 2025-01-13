@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/news_provider.dart';
+import '../../dependency_injection.dart';
+import '../viewmodels/news_viewmodel.dart';
 import 'news_details_screen.dart';
 
 class NewsListScreen extends StatelessWidget {
@@ -9,19 +10,22 @@ class NewsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<NewsProvider>(context);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('News List')),
-      body: provider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: provider.fetchArticles,
+    return ChangeNotifierProvider(
+      create: (_) => sl<NewsViewModel>()..fetchNews(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('News List')),
+        body: Consumer<NewsViewModel>(
+          builder: (context, viewModel, child) {
+            if (viewModel.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return RefreshIndicator(
+              onRefresh: viewModel.fetchNews,
               child: ListView.separated(
-                itemCount: provider.articles.length,
+                itemCount: viewModel.articles.length,
                 separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
-                  final article = provider.articles[index];
+                  final article = viewModel.articles[index];
                   return ListTile(
                     title: Text(article.title ?? 'No Title'),
                     subtitle: Text(article.source ?? 'Unknown Source'),
@@ -37,7 +41,10 @@ class NewsListScreen extends StatelessWidget {
                   );
                 },
               ),
-            ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

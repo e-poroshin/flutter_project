@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/saved_articles_provider.dart';
+import '../../provider/saved_articles_provider.dart';
 import 'news_details_screen.dart';
 
 class SavedScreen extends StatelessWidget {

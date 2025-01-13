@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../models/news_article.dart';
+import '../domain/entities/news_article.dart';
 
 class SavedArticlesProvider extends ChangeNotifier {
   late Database _database;

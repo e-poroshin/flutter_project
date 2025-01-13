@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/profile_provider.dart';
+import '../../provider/profile_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -105,8 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  foregroundColor: WidgetStateProperty.all<Color>(
-                      Colors.white),
+                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                 ),
                 onPressed: _hasChanged
                     ? () {
