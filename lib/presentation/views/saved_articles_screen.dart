@@ -19,13 +19,13 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _viewModel = Provider.of<SavedArticlesViewModel>(context);
-    _viewModel.fetchSavedArticles();
+    _viewModel.getSavedArticles();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => sl<SavedArticlesViewModel>()..fetchSavedArticles(),
+      create: (_) => sl<SavedArticlesViewModel>()..getSavedArticles(),
       child: Scaffold(
         appBar: AppBar(title: const Text('Saved articles')),
         body: Consumer<SavedArticlesViewModel>(

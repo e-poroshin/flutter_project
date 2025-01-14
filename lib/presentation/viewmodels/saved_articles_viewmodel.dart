@@ -13,7 +13,7 @@ class SavedArticlesViewModel extends ChangeNotifier {
 
   List<NewsArticle> get savedArticles => _savedArticles;
 
-  Future<void> fetchSavedArticles() async {
+  Future<void> getSavedArticles() async {
     _savedArticles = await getSavedArticlesUseCase();
     notifyListeners();
   }

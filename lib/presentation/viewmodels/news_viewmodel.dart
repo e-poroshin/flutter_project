@@ -4,9 +4,9 @@ import '../../domain/entities/news_article.dart';
 import '../../domain/usecases/get_news_usecase.dart';
 
 class NewsViewModel extends ChangeNotifier {
-  final GetNewsUseCase getNewsUseCase;
+  final FetchNewsUseCase fetchNewsUseCase;
 
-  NewsViewModel(this.getNewsUseCase);
+  NewsViewModel(this.fetchNewsUseCase);
 
   List<NewsArticle> _articles = [];
   bool _isLoading = true;
@@ -18,7 +18,7 @@ class NewsViewModel extends ChangeNotifier {
   Future<void> fetchNews() async {
     _isLoading = true;
     notifyListeners();
-    _articles = await getNewsUseCase();
+    _articles = await fetchNewsUseCase();
     _isLoading = false;
     notifyListeners();
   }
