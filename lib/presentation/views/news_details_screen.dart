@@ -29,8 +29,8 @@ class NewsDetailScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(viewModel.isSaved
-                            ? 'Article saved!'
-                            : 'Article removed from saved list.'),
+                            ? 'Article removed from saved list.'
+                            : 'Article saved!'),
                       ),
                     );
                   },

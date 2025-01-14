@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'news_list_screen.dart';
 import 'profile_screen.dart';
-import 'saved_screen.dart';
+import 'saved_articles_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const NewsListScreen(),
-    const SavedScreen(),
+    const SavedArticlesScreen(),
     const ProfileScreen(),
   ];
 

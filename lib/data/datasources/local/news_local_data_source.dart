@@ -6,8 +6,7 @@ import '../../../domain/entities/news_article.dart';
 class NewsLocalDataSource extends ChangeNotifier {
   late Database _database;
   List<NewsArticle> _savedArticles = [];
-
-  List<NewsArticle> get savedArticles => _savedArticles;
+  bool _isDatabaseInitialized = false;
 
   NewsLocalDataSource() {
     _initDatabase();
@@ -31,6 +30,7 @@ class NewsLocalDataSource extends ChangeNotifier {
         ''');
       },
     );
+    _isDatabaseInitialized = true;
     await _loadSavedArticles();
   }
 
@@ -60,5 +60,18 @@ class NewsLocalDataSource extends ChangeNotifier {
 
   bool isArticleSaved(NewsArticle article) {
     return _savedArticles.any((saved) => saved.title == article.title);
+  }
+
+  Future<void> clearSavedArticles() async {
+    await _database.delete('articles');
+    _savedArticles.clear();
+    notifyListeners();
+  }
+
+  Future<List<NewsArticle>> getSavedArticles() async {
+    if (!_isDatabaseInitialized) {
+      await _initDatabase();
+    }
+    return _savedArticles;
   }
 }

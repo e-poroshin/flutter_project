@@ -46,4 +46,9 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<bool> isArticleSaved(NewsArticle article) async {
     return newsLocalDataSource.isArticleSaved(article);
   }
+
+  @override
+  Future<List<NewsArticle>> getSavedArticles() async {
+    return newsLocalDataSource.getSavedArticles();
+  }
 }

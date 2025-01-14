@@ -8,4 +8,6 @@ abstract class NewsRepository {
   Future<void> saveArticle(NewsArticle article);
 
   Future<void> removeArticle(NewsArticle article);
+
+  Future<List<NewsArticle>> getSavedArticles();
 }
