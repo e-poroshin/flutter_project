@@ -5,8 +5,13 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/entities/news_article.dart';
 import '../../domain/repositories/news_repository.dart';
+import '../datasources/local/news_local_data_source.dart';
 
 class NewsRepositoryImpl implements NewsRepository {
+  final NewsLocalDataSource newsLocalDataSource;
+
+  NewsRepositoryImpl(this.newsLocalDataSource);
+
   @override
   Future<List<NewsArticle>> getNews() async {
     final apiKey = dotenv.env['API_KEY'];
@@ -25,5 +30,20 @@ class NewsRepositoryImpl implements NewsRepository {
     } else {
       throw Exception('Failed to load articles');
     }
+  }
+
+  @override
+  Future<void> saveArticle(NewsArticle article) async {
+    await newsLocalDataSource.saveArticle(article);
+  }
+
+  @override
+  Future<void> removeArticle(NewsArticle article) async {
+    await newsLocalDataSource.removeArticle(article);
+  }
+
+  @override
+  Future<bool> isArticleSaved(NewsArticle article) async {
+    return newsLocalDataSource.isArticleSaved(article);
   }
 }

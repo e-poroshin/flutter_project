@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/saved_articles_provider.dart';
+import '../../data/datasources/local/news_local_data_source.dart';
 import 'news_details_screen.dart';
 
 class SavedScreen extends StatelessWidget {
@@ -9,7 +9,7 @@ class SavedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SavedArticlesProvider>(context);
+    final provider = Provider.of<NewsLocalDataSource>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Saved articles')),

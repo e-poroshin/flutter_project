@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../domain/entities/news_article.dart';
+import '../../../domain/entities/news_article.dart';
 
-class SavedArticlesProvider extends ChangeNotifier {
+class NewsLocalDataSource extends ChangeNotifier {
   late Database _database;
   List<NewsArticle> _savedArticles = [];
 
   List<NewsArticle> get savedArticles => _savedArticles;
 
-  SavedArticlesProvider() {
+  NewsLocalDataSource() {
     _initDatabase();
   }
 
