@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../domain/entities/news_article.dart';
 
-class NewsLocalDataSource extends ChangeNotifier {
+class NewsLocalDataSource {
   late Database _database;
   List<NewsArticle> _savedArticles = [];
   bool _isDatabaseInitialized = false;
@@ -37,14 +36,12 @@ class NewsLocalDataSource extends ChangeNotifier {
   Future<void> _loadSavedArticles() async {
     final List<Map<String, dynamic>> maps = await _database.query('articles');
     _savedArticles = maps.map((map) => NewsArticle.fromMap(map)).toList();
-    notifyListeners();
   }
 
   Future<void> saveArticle(NewsArticle article) async {
     if (!_savedArticles.any((saved) => saved.title == article.title)) {
       await _database.insert('articles', article.toMap());
       _savedArticles.add(article);
-      notifyListeners();
     }
   }
 
@@ -55,7 +52,6 @@ class NewsLocalDataSource extends ChangeNotifier {
       whereArgs: [article.title],
     );
     _savedArticles.removeWhere((saved) => saved.title == article.title);
-    notifyListeners();
   }
 
   bool isArticleSaved(NewsArticle article) {
@@ -65,7 +61,6 @@ class NewsLocalDataSource extends ChangeNotifier {
   Future<void> clearSavedArticles() async {
     await _database.delete('articles');
     _savedArticles.clear();
-    notifyListeners();
   }
 
   Future<List<NewsArticle>> getSavedArticles() async {

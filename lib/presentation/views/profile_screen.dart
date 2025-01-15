@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/profile_provider.dart';
+import '../viewmodels/profile_viewmodel.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,7 +14,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
-  bool _hasChanged = false;
 
   @override
   void initState() {
@@ -24,39 +23,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _lastNameController = TextEditingController();
     _emailController = TextEditingController();
 
-    _firstNameController.addListener(_onFieldChange);
-    _lastNameController.addListener(_onFieldChange);
-    _emailController.addListener(_onFieldChange);
-
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    profileProvider.addListener(_populateFields);
-    _populateFields();
+    final viewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    viewModel.loadProfile();
+    viewModel.addListener(_populateFields);
   }
 
   void _populateFields() {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final viewModel = Provider.of<ProfileViewModel>(context, listen: false);
     setState(() {
-      _firstNameController.text = profileProvider.firstName;
-      _lastNameController.text = profileProvider.lastName;
-      _emailController.text = profileProvider.email;
-    });
-  }
-
-  void _onFieldChange() {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    setState(() {
-      _hasChanged = _firstNameController.text != profileProvider.firstName ||
-          _lastNameController.text != profileProvider.lastName ||
-          _emailController.text != profileProvider.email;
+      _firstNameController.text = viewModel.profile?.firstName ?? '';
+      _lastNameController.text = viewModel.profile?.lastName ?? '';
+      _emailController.text = viewModel.profile?.email ?? '';
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final viewModel = Provider.of<ProfileViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
@@ -70,6 +53,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'First Name',
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) => viewModel.updateProfile(
+                value,
+                _lastNameController.text,
+                _emailController.text,
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -78,6 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'Last Name',
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) => viewModel.updateProfile(
+                _firstNameController.text,
+                value,
+                _emailController.text,
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -85,6 +78,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
+              ),
+              onChanged: (value) => viewModel.updateProfile(
+                _firstNameController.text,
+                _lastNameController.text,
+                value,
               ),
             ),
             const Spacer(),
@@ -107,16 +105,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                 ),
-                onPressed: _hasChanged
-                    ? () {
-                        profileProvider.saveProfile(
-                          _firstNameController.text,
-                          _lastNameController.text,
-                          _emailController.text,
-                        );
-                        setState(() {
-                          _hasChanged = false;
-                        });
+                onPressed: viewModel.hasChanged
+                    ? () async {
+                        await viewModel.saveProfile();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Profile saved!')),
                         );
@@ -133,9 +124,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    profileProvider.removeListener(_populateFields);
+    final viewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    viewModel.removeListener(_populateFields);
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
