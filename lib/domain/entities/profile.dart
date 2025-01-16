@@ -24,4 +24,11 @@ class Profile {
       'email': email,
     };
   }
+
+  bool isNotEqual(Profile? other) {
+    return other != null &&
+        (other.firstName != firstName ||
+            other.lastName != lastName ||
+            other.email != email);
+  }
 }

@@ -14,6 +14,7 @@ class ProfileViewModel extends ChangeNotifier {
   });
 
   Profile? _profile;
+  Profile? _initialProfile;
   bool _hasChanged = false;
 
   Profile? get profile => _profile;
@@ -22,18 +23,20 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future<void> loadProfile() async {
     _profile = await getProfileUseCase();
+    _initialProfile = _profile;
     notifyListeners();
   }
 
   void updateProfile(String firstName, String lastName, String email) {
     _profile = Profile(firstName: firstName, lastName: lastName, email: email);
-    _hasChanged = true;
+    _hasChanged = _profile?.isNotEqual(_initialProfile) ?? true;
     notifyListeners();
   }
 
   Future<void> saveProfile() async {
     if (_profile != null) {
       await saveProfileUseCase(_profile!);
+      _initialProfile = _profile;
       _hasChanged = false;
       notifyListeners();
     }
