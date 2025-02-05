@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'application.dart';
 import 'dependency_injection.dart' as di;
-import 'presentation/viewmodels/news_details_viewmodel.dart';
 import 'presentation/viewmodels/news_viewmodel.dart';
 import 'presentation/viewmodels/profile_viewmodel.dart';
 import 'presentation/viewmodels/saved_articles_viewmodel.dart';
@@ -17,8 +16,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => di.sl<NewsViewModel>()),
-        ChangeNotifierProvider(
-            create: (context) => di.sl<NewsDetailViewModel>()),
         ChangeNotifierProvider(
             create: (context) => di.sl<SavedArticlesViewModel>()),
         ChangeNotifierProvider(create: (context) => di.sl<ProfileViewModel>()),
