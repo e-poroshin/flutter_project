@@ -1,0 +1,20 @@
+{
+  "title": "Flutter News List",
+  "news": "News",
+  "saved": "Saved",
+  "profile": "Profile",
+  "newsDetails": "News Details",
+  "articleRemoved": "Article removed from saved list.",
+  "articleSaved": "Article saved!",
+  "noTitle": "No Title",
+  "noDescription": "No Description",
+  "newsList": "News List",
+  "unknownSource": "Unknown Source",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "profileSaved": "Profile saved!",
+  "save": "Save",
+  "savedArticles": "Saved Articles",
+  "noSavedArticles": "No saved items yet."
+}

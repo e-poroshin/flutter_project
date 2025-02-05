@@ -1,0 +1,20 @@
+{
+  "title": "Список новостей - Flutter",
+  "news": "Новости",
+  "saved": "Сохраненные",
+  "profile": "Профиль",
+  "newsDetails": "Детали статьи",
+  "articleRemoved": "Статья удалена из сохраненного списка.",
+  "articleSaved": "Статья сохранена!",
+  "noTitle": "Нет заголовка",
+  "noDescription": "Нет описания",
+  "newsList": "Список новостей",
+  "unknownSource": "Неизвестный источник",
+  "firstName": "Имя",
+  "lastName": "Фамилия",
+  "email": "эл. почта",
+  "profileSaved": "Профиль сохранен!",
+  "save": "Сохранить",
+  "savedArticles": "Сохраненные статьи",
+  "noSavedArticles": "Пока нет сохраненных элементов."
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -40,17 +41,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProfileViewModel>(context);
+    var localizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(title: Text(localizations.translate('profile'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _firstNameController,
-              decoration: const InputDecoration(
-                labelText: 'First Name',
+              decoration: InputDecoration(
+                labelText: localizations.translate('firstName'),
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) => viewModel.updateProfile(
@@ -62,8 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _lastNameController,
-              decoration: const InputDecoration(
-                labelText: 'Last Name',
+              decoration: InputDecoration(
+                labelText: localizations.translate('lastName'),
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) => viewModel.updateProfile(
@@ -75,8 +77,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
+              decoration: InputDecoration(
+                labelText: localizations.translate('email'),
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) => viewModel.updateProfile(
@@ -109,11 +111,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? () async {
                         await viewModel.saveProfile();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Profile saved!')),
+                          SnackBar(content: Text(localizations.translate('profileSaved'))),
                         );
                       }
                     : null,
-                child: const Text('Save'),
+                child: Text(localizations.translate('save')),
               ),
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../dependency_injection.dart';
 import '../../domain/entities/news_article.dart';
+import '../../l10n/app_localizations.dart';
 import '../viewmodels/news_details_viewmodel.dart';
 
 class NewsDetailScreen extends StatelessWidget {
@@ -12,11 +13,13 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
+
     return ChangeNotifierProvider(
       create: (_) => sl<NewsDetailViewModel>()..checkIfArticleIsSaved(article),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('News Details'),
+          title: Text(localizations.translate('newsDetails')),
           actions: [
             Consumer<NewsDetailViewModel>(
               builder: (context, viewModel, child) {
@@ -29,8 +32,8 @@ class NewsDetailScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(viewModel.isSaved
-                            ? 'Article removed from saved list.'
-                            : 'Article saved!'),
+                            ? localizations.translate('articleRemoved')
+                            : localizations.translate('articleSaved')),
                       ),
                     );
                   },
@@ -64,12 +67,12 @@ class NewsDetailScreen extends StatelessWidget {
                   : const SizedBox.shrink(),
               const SizedBox(height: 16),
               Text(
-                article.title ?? 'No Title',
+                article.title ?? localizations.translate('noTitle'),
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(article.description ?? 'No Description'),
+              Text(article.description ?? localizations.translate('noDescription')),
               const Spacer(),
             ],
           ),
